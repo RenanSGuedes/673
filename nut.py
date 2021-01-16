@@ -14,7 +14,7 @@ te_o = 375
 te_a = 280
 ts_o = 350
 
-# * Ver temperatura da água
+# * Ver Cp_ a para temperatura da água na entrada
 Cp_a = 4198 # | J/kg * K
 
 C_o = fluxo_o * Cp_o
@@ -56,3 +56,48 @@ ic(NUTContraCorrente)
 areaContraCorrente = (NUTContraCorrente * C_min)/U
 
 ic(areaContraCorrente)
+
+# todo * * * * * * * * * * * * 
+
+# * Ver Cp_ a para temperatura da água na saida
+Cp_a = 4180 # | J/kg * K
+
+C_o = fluxo_o * Cp_o
+C_a = fluxo_a * Cp_a
+
+ic(C_o)
+ic(C_a)
+
+if C_o > C_a:
+  C_min = C_a
+  C_max = C_o
+else:
+  C_min = C_o
+  C_max = C_a
+
+ic(C_min)
+ic(C_max)
+
+cMinSobrecMax = C_min/C_max
+
+ic(cMinSobrecMax)
+
+qmax = C_min * (te_o - te_a)
+
+ic(qmax)
+
+q = fluxo_o * Cp_o * (te_o - ts_o)
+
+ic(q)
+
+epsilon = q/qmax
+
+ic(epsilon)
+
+NUTFluxoParalelo = - (log(1 - epsilon * (1 + (C_min/C_max))))/(1 + (C_min/C_max))
+
+ic(NUTFluxoParalelo)
+
+areaFluxoParalelo = (NUTFluxoParalelo * C_min)/U
+
+ic(areaFluxoParalelo)
